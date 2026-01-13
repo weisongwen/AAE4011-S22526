@@ -7,7 +7,7 @@ Lecture page for AAE4011, Semester 2, 2025-2026
 This is the Github page for lecture AAE4011, Artificial Intelligence for Unmanned Autonomous Systems. This page will include example code and learning materials. Students can raise issues from this Github repository through [Issue](https://github.com/weisongwen/AAE4011-S22526/issues).
 
 <p align="center">
-  <img width="520pix" src="img/overview.png">
+  <img width="720pix" src="img/overview.png">
 </p>
 
 - **Lecturer**: [Dr. Weisong Wen](https://www.polyu.edu.hk/aae/people/academic-staff/dr-wen-weisong/), [Department of Aeronautical and Aviation Engineering](https://www.polyu.edu.hk/aae/) (AAE)
