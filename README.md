@@ -14,7 +14,7 @@ This is the Github page for lecture AAE4011, Artificial Intelligence for Unmanne
 - **Address**: R820, PolyU
 - **Email**: welson.wen@polyu.edu.hk
 - **Teaching Assistants**: Naigui Xiao, Xiangru Wang, Qi Zhang, Junzhe Wang
-- **Lecture Venue and Time**: BC302, Tue 12:30-15:20
+- **Lecture Venue and Time**: BC302, Tue 12:30-15:20PM
 
 ## Subject Intended Learning Outcomes (ILOs)
 
