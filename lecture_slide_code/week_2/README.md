@@ -50,7 +50,82 @@ This script provides comprehensive visualizations of the sigmoid (logistic) func
    - Generates synthetic binary classification data
    - Useful for demonstration and testing
 
+### `logic_regression_ui.py`
+**Interactive Logistic Regression UI**
+
+This script provides an interactive interface to adjust logistic regression parameters and noise levels with real-time visualization. Perfect for exploring how different parameters affect the logistic regression curve.
+
+**Features:**
+- **Interactive sliders** to adjust slope, intercept, and noise level
+- **Real-time visualization** - plot updates as you move sliders
+- **Colab-compatible** - uses ipywidgets for Google Colab
+- **Fallback modes** - works in various environments (Colab, Jupyter, local Python)
+
+**Key Functions:**
+
+1. **`interactive_logistic_regression_colab()`**
+   - Creates interactive UI using ipywidgets (best for Colab/Jupyter)
+   - Automatically detected and used in Colab environments
+   - Responsive sliders that update the plot in real-time
+
+2. **`interactive_logistic_regression()`**
+   - Creates interactive UI using matplotlib widgets (for local Python)
+   - Useful for running in Python scripts with GUI support
+
+3. **`simple_interactive_demo()`**
+   - Static demonstration with multiple parameter combinations
+   - Fallback when interactive mode isn't available
+
+4. **`generate_noisy_data()`**
+   - Generates binary classification data with adjustable noise
+   - Used for demonstrating logistic regression with real data
+
+**Usage in Google Colab:**
+
+```python
+# Install ipywidgets if needed
+!pip install ipywidgets
+
+# Import and run
+from logic_regression_ui import interactive_logistic_regression_colab
+from IPython.display import display
+
+controls = interactive_logistic_regression_colab()
+display(controls)
+```
+
+Or simply run `main()` - it will automatically detect the environment:
+```python
+from logic_regression_ui import main
+main()
+```
+
+**Interactive Controls:**
+- **Slope Slider** (-3.0 to 3.0): Controls the steepness of the logistic curve
+- **Intercept Slider** (-5.0 to 5.0): Shifts the curve left or right
+- **Noise Level Slider** (0.0 to 1.0): Controls the randomness in the data
+- **Reset Button**: Restores default parameter values
+
 ## Requirements
+
+The code requires the following Python packages:
+
+- `numpy` - For numerical computations
+- `matplotlib` - For plotting and visualization
+- `scikit-learn` (optional) - For logistic regression fitting in `logic_regression.py`
+- `ipywidgets` (optional, for Colab) - For interactive widgets in `logic_regression_ui.py`
+
+**Installation:**
+```bash
+# Basic requirements
+pip install numpy matplotlib
+
+# For logistic regression fitting
+pip install scikit-learn
+
+# For interactive UI in Colab/Jupyter
+pip install ipywidgets
+```
 
 The code requires the following Python packages:
 
@@ -65,7 +140,7 @@ pip install numpy matplotlib scikit-learn
 
 ## Usage
 
-### Running the Complete Example
+### Running the Static Plotting Example
 
 ```bash
 python logic_regression.py
@@ -73,12 +148,34 @@ python logic_regression.py
 
 This will generate multiple plots demonstrating different aspects of the logistic function.
 
+### Running the Interactive UI
+
+**For Google Colab (Recommended):**
+```python
+# Install ipywidgets
+!pip install ipywidgets
+
+# Run interactive UI
+from logic_regression_ui import interactive_logistic_regression_colab
+from IPython.display import display
+
+controls = interactive_logistic_regression_colab()
+display(controls)
+```
+
+**For Local Python:**
+```bash
+python logic_regression_ui.py
+```
+
+The `main()` function will automatically detect your environment and use the appropriate interactive mode.
+
 ### Running on Google Colab
 
-The code is compatible with Google Colab. Simply:
-1. Upload the file to Google Colab
-2. Install required packages: `!pip install numpy matplotlib scikit-learn`
-3. Run the script
+Both scripts are compatible with Google Colab:
+1. Upload the file(s) to Google Colab
+2. Install required packages: `!pip install numpy matplotlib scikit-learn ipywidgets`
+3. Run the script or use the interactive UI
 
 ### Using Individual Functions
 
