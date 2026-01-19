@@ -32,7 +32,7 @@ Upon completion of the subject, students will be able to:
 - **Group Project**: 15%
 - **Final Examination**: 50%
 
-## Class Schedule
+## Class Schedule (Tentative)
 
 | Sem. Week | Topics Taught | Assessment |
 |-----------|---------------|------------|
