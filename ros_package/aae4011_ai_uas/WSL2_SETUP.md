@@ -1,12 +1,31 @@
 # Setting Up AAE4011 ROS Package in WSL2 + Ubuntu 20.04
 
-This guide explains how to set up the `aae4011_ai_uas` ROS package in your WSL2 environment with Ubuntu 20.04 and ROS Noetic.
+This guide explains how to set up the `aae4011_ai_uas` ROS package in your WSL2 environment with Ubuntu 20.04 and ROS Noetic. This setup assumes you are using Cursor IDE in WSL2 to directly clone and work with the repository.
+
+## Workflow Overview
+
+The setup process follows these steps:
+
+1. **Clone the repository** from GitHub directly in WSL2 using Cursor or git command
+2. **Create a catkin workspace** (if not already created)
+3. **Link the ROS package** to the catkin workspace
+4. **Install dependencies** (ROS packages and Python libraries)
+5. **Build the workspace** using `catkin_make`
+6. **Run the Python scripts** in WSL2+ROS environment
+
+This approach allows you to:
+- Work directly with the repository in WSL2
+- Use Cursor IDE for code editing
+- Keep the repository in sync with GitHub
+- Compile and run ROS nodes seamlessly
 
 ## Prerequisites
 
 - Windows 10/11 with WSL2 enabled
 - Ubuntu 20.04 installed in WSL2
 - ROS Noetic installed (instructions below if not installed)
+- Git installed in WSL2
+- Cursor IDE (or any code editor) running in WSL2
 
 ## Step-by-Step Setup
 
@@ -16,6 +35,8 @@ Open Windows Terminal or PowerShell and run:
 ```bash
 wsl
 ```
+
+Or open Cursor IDE directly in WSL2 environment.
 
 ### Step 2: Install ROS Noetic (if not already installed)
 
@@ -57,23 +78,26 @@ catkin_make
 source devel/setup.bash
 ```
 
-### Step 4: Copy Package from Windows to WSL2
+### Step 4: Clone the Repository from GitHub
 
-The Windows filesystem is accessible from WSL2 at `/mnt/c/`, `/mnt/d/`, etc.
+Clone the entire repository directly in WSL2:
 
 ```bash
 # Navigate to catkin workspace src folder
 cd ~/catkin_ws/src
 
-# Copy the package from Windows
-# Replace the path with your actual Windows path
-# Example: If package is at C:\Users\Administrator\Documents\AAE4011-S22526\ros_package\aae4011_ai_uas
+# Clone the repository
+git clone https://github.com/weisongwen/AAE4011-S22526.git
 
-cp -r /mnt/c/Users/Administrator/Documents/AAE4011-S22526/ros_package/aae4011_ai_uas .
+# Create symbolic link to the ROS package (recommended for ROS packages)
+cd ~/catkin_ws/src
+ln -s AAE4011-S22526/ros_package/aae4011_ai_uas .
 
-# Or create a symbolic link (not recommended for ROS packages)
-# ln -s /mnt/c/Users/Administrator/Documents/AAE4011-S22526/ros_package/aae4011_ai_uas .
+# Verify the package is linked correctly
+ls -la ~/catkin_ws/src/aae4011_ai_uas
 ```
+
+**Note:** Using a symbolic link allows you to work directly with the cloned repository while keeping it in the catkin workspace structure.
 
 ### Step 5: Install Dependencies
 
@@ -135,14 +159,60 @@ roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/your_lida
 
 ### Test with a Rosbag
 
-If you have a rosbag file with point cloud data:
+A test rosbag file is available for testing the point cloud analyzer:
+
+**Rosbag Information:**
+- **Filename:** `campus_small_dataset.bag`
+- **Download Link:** [Google Drive](https://drive.google.com/file/d/160zAWgFxbWGUAKMiI8tJcmSgSmBex5ZC/view?usp=drive_link)
+
+**Download the Rosbag:**
+
+You can download the rosbag file in WSL2 using one of these methods:
+
+**Method 1: Using gdown (Recommended)**
+```bash
+# Install gdown if not already installed
+pip3 install gdown
+
+# Download the rosbag (extract file ID from Google Drive link)
+gdown --id 160zAWgFxbWGUAKMiI8tJcmSgSmBex5ZC -O campus_small_dataset.bag
+
+# Move to a convenient location (optional)
+mkdir -p ~/rosbags
+mv campus_small_dataset.bag ~/rosbags/
+```
+
+**Method 2: Using wget (if direct download link is available)**
+```bash
+# Create directory for rosbags
+mkdir -p ~/rosbags
+cd ~/rosbags
+
+# Download using wget (you may need to get the direct download link from Google Drive)
+# Note: For Google Drive, you may need to use gdown instead
+wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=160zAWgFxbWGUAKMiI8tJcmSgSmBex5ZC' -O campus_small_dataset.bag
+```
+
+**Method 3: Manual Download**
+1. Open the [Google Drive link](https://drive.google.com/file/d/160zAWgFxbWGUAKMiI8tJcmSgSmBex5ZC/view?usp=drive_link) in your browser
+2. Download `campus_small_dataset.bag` to your Windows Downloads folder
+3. Copy it to WSL2:
+```bash
+# Copy from Windows Downloads to WSL2
+mkdir -p ~/rosbags
+cp /mnt/c/Users/$(whoami)/Downloads/campus_small_dataset.bag ~/rosbags/
+```
+
+**Run the Test:**
+
+Once you have the rosbag file, test the point cloud analyzer:
 
 ```bash
 # Terminal 1: Start roscore
 roscore
 
 # Terminal 2: Play the rosbag
-rosbag play /path/to/your/lidar_data.bag
+rosbag play ~/rosbags/campus_small_dataset.bag
 
 # Terminal 3: Run the analyzer
 roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/velodyne_points
@@ -151,13 +221,19 @@ roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/velodyne_
 rostopic echo /pointcloud_stats
 ```
 
+**Note:** Make sure the point cloud topic name matches. You can check available topics in the rosbag:
+```bash
+# Check topics in the rosbag
+rosbag info ~/rosbags/campus_small_dataset.bag
+```
+
 ## Quick Setup Script
 
-For convenience, you can use the provided setup script:
+For convenience, you can use the provided setup script after cloning the repository:
 
 ```bash
 # Navigate to the package scripts folder
-cd /mnt/c/Users/Administrator/Documents/AAE4011-S22526/ros_package/aae4011_ai_uas/scripts
+cd ~/catkin_ws/src/aae4011_ai_uas/scripts
 
 # Make the script executable
 chmod +x setup_wsl2.sh
@@ -165,6 +241,8 @@ chmod +x setup_wsl2.sh
 # Run the setup script
 ./setup_wsl2.sh
 ```
+
+**Note:** The setup script will automatically detect the package location and set up the workspace accordingly.
 
 ## Troubleshooting
 
@@ -203,21 +281,62 @@ pip3 install numpy
 source /opt/ros/noetic/setup.bash
 ```
 
-### Issue: Cannot access Windows files
+### Issue: Git clone fails
 ```bash
-# Windows C: drive is at /mnt/c/
-ls /mnt/c/Users/
+# Make sure git is installed
+sudo apt install git -y
 
-# If you see permission issues, try:
-sudo mount -t drvfs C: /mnt/c -o metadata
+# Check internet connection
+ping -c 3 github.com
+
+# If using proxy, configure git
+git config --global http.proxy http://proxy.example.com:port
 ```
 
-## File Paths Reference
+### Issue: Symbolic link not working
+```bash
+# Verify the link exists
+ls -la ~/catkin_ws/src/aae4011_ai_uas
 
-| Windows Path | WSL2 Path |
-|--------------|-----------|
-| `C:\Users\Administrator\Documents\` | `/mnt/c/Users/Administrator/Documents/` |
-| `D:\Data\` | `/mnt/d/Data/` |
+# If link is broken, remove and recreate
+rm ~/catkin_ws/src/aae4011_ai_uas
+cd ~/catkin_ws/src
+ln -s AAE4011-S22526/ros_package/aae4011_ai_uas .
+
+# Or copy the package instead (if symlink doesn't work)
+cp -r AAE4011-S22526/ros_package/aae4011_ai_uas .
+```
+
+## Working with the Repository
+
+### Updating the Code
+
+Since you cloned the repository directly, you can easily update it:
+
+```bash
+# Navigate to the repository
+cd ~/catkin_ws/src/AAE4011-S22526
+
+# Pull latest changes
+git pull origin main
+
+# Rebuild the workspace
+cd ~/catkin_ws
+catkin_make
+source devel/setup.bash
+```
+
+### Running Python Scripts Directly
+
+You can also run the Python scripts directly in WSL2 without ROS:
+
+```bash
+# Navigate to the script directory
+cd ~/catkin_ws/src/AAE4011-S22526/ros_package/aae4011_ai_uas/scripts
+
+# Run the script directly (if it doesn't require ROS)
+python3 pointcloud_analyzer.py
+```
 
 ## Useful Commands
 
@@ -236,6 +355,10 @@ rostopic list | grep -i point
 
 # Check message type
 rostopic info /velodyne_points
+
+# Check git repository status
+cd ~/catkin_ws/src/AAE4011-S22526
+git status
 ```
 
 ## Contact

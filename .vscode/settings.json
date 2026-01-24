@@ -1,0 +1,17 @@
+{
+    "terminal.integrated.defaultProfile.windows": "WSL",
+    "terminal.integrated.profiles.windows": {
+        "WSL": {
+            "path": "wsl.exe",
+            "args": [],
+            "icon": "terminal-linux"
+        },
+        "PowerShell": {
+            "source": "PowerShell",
+            "icon": "terminal-powershell"
+        }
+    },
+    "terminal.integrated.shell.windows": "wsl.exe",
+    "terminal.integrated.shellArgs.windows": [],
+    "terminal.integrated.cwd": "${workspaceFolder}"
+}

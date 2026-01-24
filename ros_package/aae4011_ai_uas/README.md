@@ -157,18 +157,36 @@ rostopic echo /pointcloud_frequency
 
 ## Example with Rosbag
 
+A test rosbag file is available for testing:
+
+**Test Rosbag:**
+- **Filename:** `campus_small_dataset.bag`
+- **Download:** [Google Drive](https://drive.google.com/file/d/160zAWgFxbWGUAKMiI8tJcmSgSmBex5ZC/view?usp=drive_link)
+
+**Download using gdown:**
+```bash
+pip3 install gdown
+gdown --id 160zAWgFxbWGUAKMiI8tJcmSgSmBex5ZC -O campus_small_dataset.bag
+```
+
+**Run the example:**
 ```bash
 # Terminal 1: Start roscore
 roscore
 
-# Terminal 2: Play a rosbag with point cloud data
-rosbag play your_lidar_data.bag
+# Terminal 2: Play the rosbag
+rosbag play campus_small_dataset.bag
 
 # Terminal 3: Run the analyzer
 roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/velodyne_points
 
 # Terminal 4: View results
 rostopic echo /pointcloud_stats
+```
+
+**Note:** Check the topic name in the rosbag if `/velodyne_points` doesn't work:
+```bash
+rosbag info campus_small_dataset.bag
 ```
 
 ## Common Point Cloud Topics
