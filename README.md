@@ -64,6 +64,57 @@ Upon completion of the subject, students will be able to:
 - Homework assignments will be announced during lectures with specific deadlines.
 - This teaching plan is tentative and subject to adjustment based on actual teaching progress.
 
+## Repository Structure
+
+This repository contains two main components:
+
+### 1. Lecture Slide Code (Standalone Python)
+
+Located in `lecture_slide_code/`, these are standalone Python examples that can be run directly or in Google Colab.
+
+```
+lecture_slide_code/
+├── week_1/    # Object detection with YOLOv5, Gauss-Newton
+├── week_2/    # Logistic regression, interactive UI
+├── week_3/    # Trajectory evaluation
+└── ...
+```
+
+### 2. ROS Package
+
+Located in `ros_package/aae4011_ai_uas/`, this is a ROS 1 (Noetic) package for integrating AI algorithms with robotic systems.
+
+```
+ros_package/
+└── aae4011_ai_uas/
+    ├── launch/     # Launch files
+    ├── scripts/    # Python ROS nodes
+    ├── src/        # Python modules
+    └── config/     # Configuration files
+```
+
+**ROS Package Features:**
+- Object Detection Node (YOLOv5)
+- Trajectory Visualization Node
+- Logistic Regression Node
+
+**Installation:**
+```bash
+cd ~/catkin_ws/src
+git clone https://github.com/weisongwen/AAE4011-S22526.git
+ln -s AAE4011-S22526/ros_package/aae4011_ai_uas .
+cd ~/catkin_ws
+catkin_make
+source devel/setup.bash
+```
+
+**Usage:**
+```bash
+roslaunch aae4011_ai_uas demo.launch
+```
+
+For detailed ROS package documentation, see [ros_package/aae4011_ai_uas/README.md](ros_package/aae4011_ai_uas/README.md).
+
 ## Questions
 
 Students can raise issues from this Github repository through the [Issue](https://github.com/weisongwen/AAE4011-S22526/issues) section.

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+AAE4011 - Artificial Intelligence for Unmanned Autonomous Systems
+Launch file for trajectory visualization node
+
+Usage:
+  roslaunch aae4011_ai_uas trajectory_visualizer.launch
+  roslaunch aae4011_ai_uas trajectory_visualizer.launch csv_file:=/path/to/your/file.csv
+-->
+<launch>
+  <!-- Arguments -->
+  <arg name="csv_file" default="$(find aae4011_ai_uas)/config/sample_trajectory.csv" 
+       doc="Path to CSV file containing trajectory data"/>
+  <arg name="frame_id" default="world" 
+       doc="Frame ID for visualization"/>
+  <arg name="publish_rate" default="10" 
+       doc="Publishing rate in Hz"/>
+  
+  <!-- Trajectory Visualizer Node -->
+  <node name="trajectory_visualizer" pkg="aae4011_ai_uas" type="trajectory_visualizer.py" output="screen">
+    <param name="csv_file" value="$(arg csv_file)"/>
+    <param name="frame_id" value="$(arg frame_id)"/>
+    <param name="publish_rate" value="$(arg publish_rate)"/>
+  </node>
+  
+  <!-- RViz for visualization (optional) -->
+  <arg name="rviz" default="false" doc="Launch RViz"/>
+  <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" 
+        args="-d $(find aae4011_ai_uas)/config/trajectory.rviz"/>
+</launch>
