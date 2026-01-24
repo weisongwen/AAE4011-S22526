@@ -31,7 +31,7 @@ class PointCloudAnalyzer:
     ROS node for analyzing 3D point cloud data.
     
     Subscribes:
-        - /velodyne_points or specified topic (sensor_msgs/PointCloud2): Input point cloud
+        - /points_raw or specified topic (sensor_msgs/PointCloud2): Input point cloud
     
     Publishes:
         - /pointcloud_stats (std_msgs/String): JSON formatted statistics
@@ -39,7 +39,7 @@ class PointCloudAnalyzer:
         - /pointcloud_frequency (std_msgs/Float64): Message frequency in Hz
     
     Parameters:
-        - pointcloud_topic: Input point cloud topic (default: /velodyne_points)
+        - pointcloud_topic: Input point cloud topic (default: /points_raw)
         - window_size: Number of messages for frequency calculation (default: 10)
     """
     
@@ -50,7 +50,7 @@ class PointCloudAnalyzer:
         # =============================================================================
         # Get ROS parameters
         # =============================================================================
-        self.pointcloud_topic = rospy.get_param('~pointcloud_topic', '/velodyne_points')
+        self.pointcloud_topic = rospy.get_param('~pointcloud_topic', '/points_raw')
         self.window_size = rospy.get_param('~window_size', 10)
         
         # =============================================================================

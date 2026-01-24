@@ -63,7 +63,7 @@ Analyzes 3D point cloud data and publishes statistics.
 
 | Topic | Type | Description |
 |-------|------|-------------|
-| `/velodyne_points` (configurable) | sensor_msgs/PointCloud2 | Input 3D point cloud |
+| `/points_raw` (configurable) | sensor_msgs/PointCloud2 | Input 3D point cloud |
 
 ### Published Topics
 
@@ -77,7 +77,7 @@ Analyzes 3D point cloud data and publishes statistics.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `~pointcloud_topic` | string | `/velodyne_points` | Input point cloud topic |
+| `~pointcloud_topic` | string | `/points_raw` | Input point cloud topic |
 | `~window_size` | int | 10 | Number of messages for frequency calculation |
 
 ### Output Statistics (JSON)
@@ -121,12 +121,17 @@ The `/pointcloud_stats` topic publishes JSON with the following fields:
 
 ### Using Launch File
 
+The launch file starts the point cloud analyzer **and** RViz to visualize the LiDAR point cloud (fixed frame: `velodyne`, topic: `/points_raw`).
+
 ```bash
-# Default (subscribes to /velodyne_points)
+# Default: analyzer + RViz (subscribes to /points_raw, matches campus_small_dataset.bag)
 roslaunch aae4011_ai_uas pointcloud_analyzer.launch
 
 # With custom topic
 roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/lidar/points
+
+# Without RViz
+roslaunch aae4011_ai_uas pointcloud_analyzer.launch launch_rviz:=false
 
 # With custom topic and window size
 roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/camera/depth/points window_size:=20
@@ -139,7 +144,7 @@ roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/camera/de
 roscore
 
 # Run the node
-rosrun aae4011_ai_uas pointcloud_analyzer.py _pointcloud_topic:=/velodyne_points
+rosrun aae4011_ai_uas pointcloud_analyzer.py _pointcloud_topic:=/points_raw
 ```
 
 ### View Output
@@ -177,22 +182,24 @@ roscore
 # Terminal 2: Play the rosbag
 rosbag play campus_small_dataset.bag
 
-# Terminal 3: Run the analyzer
-roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/velodyne_points
+# Terminal 3: Run analyzer + RViz (visualizes LiDAR; frame_id: velodyne)
+roslaunch aae4011_ai_uas pointcloud_analyzer.launch
 
 # Terminal 4: View results
 rostopic echo /pointcloud_stats
 ```
+RViz shows the point cloud from `/points_raw` in the `velodyne` frame.
 
-**Note:** Check the topic name in the rosbag if `/velodyne_points` doesn't work:
+**Note:** `campus_small_dataset.bag` publishes point clouds on `/points_raw`. Check topic names with:
 ```bash
 rosbag info campus_small_dataset.bag
 ```
 
 ## Common Point Cloud Topics
 
-| Sensor | Common Topic |
-|--------|-------------|
+| Sensor / Dataset | Common Topic |
+|------------------|-------------|
+| campus_small_dataset.bag | `/points_raw` |
 | Velodyne LiDAR | `/velodyne_points` |
 | Ouster LiDAR | `/ouster/points` |
 | Livox LiDAR | `/livox/lidar` |

@@ -150,7 +150,7 @@ roslaunch aae4011_ai_uas --files
 # Terminal 1: Start roscore
 roscore
 
-# Terminal 2: Run the analyzer (default topic: /velodyne_points)
+# Terminal 2: Run the analyzer (default topic: /points_raw, matches campus_small_dataset.bag)
 roslaunch aae4011_ai_uas pointcloud_analyzer.launch
 
 # Or with custom topic
@@ -214,16 +214,15 @@ roscore
 # Terminal 2: Play the rosbag
 rosbag play ~/rosbags/campus_small_dataset.bag
 
-# Terminal 3: Run the analyzer
-roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/velodyne_points
+# Terminal 3: Run the analyzer (default /points_raw matches campus_small_dataset.bag)
+roslaunch aae4011_ai_uas pointcloud_analyzer.launch
 
 # Terminal 4: View the output
 rostopic echo /pointcloud_stats
 ```
 
-**Note:** Make sure the point cloud topic name matches. You can check available topics in the rosbag:
+**Note:** `campus_small_dataset.bag` uses `/points_raw` for point clouds. Check topics with:
 ```bash
-# Check topics in the rosbag
 rosbag info ~/rosbags/campus_small_dataset.bag
 ```
 
@@ -354,7 +353,7 @@ rostopic list
 rostopic list | grep -i point
 
 # Check message type
-rostopic info /velodyne_points
+rostopic info /points_raw
 
 # Check git repository status
 cd ~/catkin_ws/src/AAE4011-S22526
