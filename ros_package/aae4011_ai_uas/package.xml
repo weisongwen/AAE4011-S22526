@@ -4,8 +4,8 @@
   <version>1.0.0</version>
   <description>
     AI for Unmanned Autonomous Systems - AAE4011
-    This ROS package contains AI algorithms and examples for unmanned autonomous systems,
-    including object detection, trajectory evaluation, and machine learning implementations.
+    This ROS package contains a point cloud analyzer for analyzing 3D LiDAR data,
+    including point count and frequency analysis.
   </description>
   
   <maintainer email="welson.wen@polyu.edu.hk">Dr. Weisong Wen</maintainer>
@@ -23,27 +23,17 @@
   <build_depend>std_msgs</build_depend>
   <build_depend>sensor_msgs</build_depend>
   <build_depend>geometry_msgs</build_depend>
-  <build_depend>nav_msgs</build_depend>
-  <build_depend>visualization_msgs</build_depend>
-  <build_depend>message_generation</build_depend>
   
   <!-- Execution dependencies -->
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
-  <exec_depend>nav_msgs</exec_depend>
-  <exec_depend>visualization_msgs</exec_depend>
-  <exec_depend>message_runtime</exec_depend>
   
   <!-- Python dependencies -->
   <exec_depend>python3-numpy</exec_depend>
-  <exec_depend>python3-matplotlib</exec_depend>
-  <exec_depend>python3-pandas</exec_depend>
-  <exec_depend>python3-scipy</exec_depend>
   
   <!-- Export -->
   <export>
-    <rosdoc config="rosdoc.yaml"/>
   </export>
 </package>

@@ -1,6 +1,6 @@
 # AAE4011 AI for Unmanned Autonomous Systems - ROS Package
 
-This ROS package contains AI algorithms and examples for unmanned autonomous systems, developed for the AAE4011 course at The Hong Kong Polytechnic University.
+This ROS package contains a point cloud analyzer for 3D LiDAR data analysis, developed for the AAE4011 course at The Hong Kong Polytechnic University.
 
 ## Package Overview
 
@@ -11,28 +11,28 @@ This ROS package contains AI algorithms and examples for unmanned autonomous sys
 
 ## Features
 
-- **Object Detection**: YOLOv5-based object detection for autonomous systems
-- **Trajectory Visualization**: Visualize trajectory data from CSV files in RViz
-- **Logistic Regression**: Binary classification using logistic regression
-- **Utility Functions**: Common functions for quaternion conversion, sigmoid, etc.
+- **Point Cloud Analysis**: Analyze 3D point cloud data from LiDAR sensors
+- **Point Count**: Count the number of points in each point cloud message
+- **Frequency Analysis**: Calculate the frequency of incoming point cloud messages
+- **Statistics**: Compute min, max, mean, and standard deviation for X, Y, Z coordinates
+- **Bounding Box**: Calculate the spatial extent of the point cloud
 
 ## Installation
 
 ### Prerequisites
 
 1. **ROS Noetic** (Ubuntu 20.04) or ROS Melodic (Ubuntu 18.04)
-2. **Python 3** with required packages
+2. **Python 3** with numpy
 3. **catkin workspace**
 
 ### Install Dependencies
 
 ```bash
 # Install ROS dependencies
-sudo apt-get install ros-noetic-cv-bridge ros-noetic-image-transport
+sudo apt-get install ros-noetic-sensor-msgs ros-noetic-std-msgs
 
 # Install Python dependencies
-pip3 install torch torchvision numpy pandas scipy matplotlib
-pip3 install ultralytics  # For YOLOv5
+pip3 install numpy
 ```
 
 ### Build the Package
@@ -41,13 +41,11 @@ pip3 install ultralytics  # For YOLOv5
 # Navigate to your catkin workspace
 cd ~/catkin_ws/src
 
-# Clone or copy the package
-# Option 1: Clone entire repository
+# Clone the repository
 git clone https://github.com/weisongwen/AAE4011-S22526.git
-ln -s AAE4011-S22526/ros_package/aae4011_ai_uas .
 
-# Option 2: Copy package directly
-cp -r /path/to/aae4011_ai_uas .
+# Create symlink to the ROS package
+ln -s AAE4011-S22526/ros_package/aae4011_ai_uas .
 
 # Build
 cd ~/catkin_ws
@@ -57,146 +55,131 @@ catkin_make
 source devel/setup.bash
 ```
 
-## Nodes
+## Node: pointcloud_analyzer.py
 
-### 1. trajectory_visualizer.py
+Analyzes 3D point cloud data and publishes statistics.
 
-Visualizes trajectory data from CSV files in RViz.
+### Subscribed Topics
 
-**Published Topics:**
-- `/trajectory` (nav_msgs/Path): Trajectory path
-- `/trajectory_markers` (visualization_msgs/MarkerArray): Visualization markers
+| Topic | Type | Description |
+|-------|------|-------------|
+| `/velodyne_points` (configurable) | sensor_msgs/PointCloud2 | Input 3D point cloud |
 
-**Parameters:**
-- `~csv_file`: Path to CSV file with trajectory data
-- `~frame_id`: Frame ID for visualization (default: "world")
-- `~publish_rate`: Publishing rate in Hz (default: 10)
+### Published Topics
 
-**Usage:**
-```bash
-roslaunch aae4011_ai_uas trajectory_visualizer.launch csv_file:=/path/to/data.csv
+| Topic | Type | Description |
+|-------|------|-------------|
+| `/pointcloud_stats` | std_msgs/String | JSON formatted statistics |
+| `/pointcloud_num_points` | std_msgs/Int32 | Number of points in the point cloud |
+| `/pointcloud_frequency` | std_msgs/Float64 | Message frequency in Hz |
+
+### Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `~pointcloud_topic` | string | `/velodyne_points` | Input point cloud topic |
+| `~window_size` | int | 10 | Number of messages for frequency calculation |
+
+### Output Statistics (JSON)
+
+The `/pointcloud_stats` topic publishes JSON with the following fields:
+
+```json
+{
+  "timestamp": 1234567890.123,
+  "message_count": 100,
+  "num_points": 65536,
+  "frequency_hz": 10.0,
+  "total_points_received": 6553600,
+  "x": {
+    "min": -50.0,
+    "max": 50.0,
+    "mean": 0.5,
+    "std": 15.2
+  },
+  "y": {
+    "min": -50.0,
+    "max": 50.0,
+    "mean": -0.3,
+    "std": 14.8
+  },
+  "z": {
+    "min": -2.0,
+    "max": 10.0,
+    "mean": 1.2,
+    "std": 2.5
+  },
+  "bounding_box": {
+    "x_range": 100.0,
+    "y_range": 100.0,
+    "z_range": 12.0
+  }
+}
 ```
 
-### 2. object_detection_node.py
+## Usage
 
-Performs object detection using YOLOv5.
+### Using Launch File
 
-**Subscribed Topics:**
-- `/camera/image_raw` (sensor_msgs/Image): Input image
-
-**Published Topics:**
-- `/detections` (std_msgs/String): JSON formatted detection results
-- `/detection_image` (sensor_msgs/Image): Image with bounding boxes
-
-**Parameters:**
-- `~image_topic`: Input image topic
-- `~detection_topic`: Output detection topic
-- `~model_name`: YOLOv5 model (yolov5n, yolov5s, yolov5m, yolov5l, yolov5x)
-- `~confidence_threshold`: Detection threshold (default: 0.5)
-
-**Usage:**
 ```bash
-roslaunch aae4011_ai_uas object_detection.launch image_topic:=/camera/image_raw
+# Default (subscribes to /velodyne_points)
+roslaunch aae4011_ai_uas pointcloud_analyzer.launch
+
+# With custom topic
+roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/lidar/points
+
+# With custom topic and window size
+roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/camera/depth/points window_size:=20
 ```
 
-### 3. logistic_regression_node.py
+### Using rosrun
 
-Demonstrates logistic regression for binary classification.
-
-**Subscribed Topics:**
-- `/input_features` (std_msgs/Float64MultiArray): Input feature vector
-
-**Published Topics:**
-- `/classification_result` (std_msgs/String): JSON classification result
-- `/probability` (std_msgs/Float64): Probability of class 1
-
-**Parameters:**
-- `~slope`: Slope parameter for logistic function
-- `~intercept`: Intercept parameter
-- `~threshold`: Classification threshold (default: 0.5)
-
-**Usage:**
 ```bash
-rosrun aae4011_ai_uas logistic_regression_node.py _slope:=1.0 _intercept:=0.0
+# Start roscore
+roscore
+
+# Run the node
+rosrun aae4011_ai_uas pointcloud_analyzer.py _pointcloud_topic:=/velodyne_points
 ```
 
-## Launch Files
+### View Output
 
-### trajectory_visualizer.launch
 ```bash
-roslaunch aae4011_ai_uas trajectory_visualizer.launch
+# View statistics (JSON)
+rostopic echo /pointcloud_stats
+
+# View number of points
+rostopic echo /pointcloud_num_points
+
+# View frequency
+rostopic echo /pointcloud_frequency
 ```
 
-### object_detection.launch
+## Example with Rosbag
+
 ```bash
-roslaunch aae4011_ai_uas object_detection.launch
+# Terminal 1: Start roscore
+roscore
+
+# Terminal 2: Play a rosbag with point cloud data
+rosbag play your_lidar_data.bag
+
+# Terminal 3: Run the analyzer
+roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/velodyne_points
+
+# Terminal 4: View results
+rostopic echo /pointcloud_stats
 ```
 
-### demo.launch
-```bash
-roslaunch aae4011_ai_uas demo.launch
-```
+## Common Point Cloud Topics
 
-## CSV File Format
-
-For trajectory visualization, CSV files should contain:
-
-| Column | Description |
+| Sensor | Common Topic |
 |--------|-------------|
-| Time | Timestamp (nanoseconds) |
-| PosX | X position |
-| PosY | Y position |
-| PosZ | Z position |
-| VelX | X velocity (optional) |
-| VelY | Y velocity (optional) |
-| VelZ | Z velocity (optional) |
-| QuatW | Quaternion W (optional) |
-| QuatX | Quaternion X (optional) |
-| QuatY | Quaternion Y (optional) |
-| QuatZ | Quaternion Z (optional) |
-
-## Examples
-
-### Visualize Trajectory
-```bash
-# Start roscore
-roscore
-
-# In another terminal, run trajectory visualizer
-roslaunch aae4011_ai_uas trajectory_visualizer.launch \
-    csv_file:=$(rospack find aae4011_ai_uas)/config/sample_trajectory.csv
-
-# In another terminal, start RViz
-rviz
-# Add Path display, set topic to /trajectory
-```
-
-### Run Object Detection
-```bash
-# Start roscore
-roscore
-
-# Run a camera node (example with USB camera)
-rosrun usb_cam usb_cam_node
-
-# Run object detection
-roslaunch aae4011_ai_uas object_detection.launch image_topic:=/usb_cam/image_raw
-
-# View detection results
-rostopic echo /detections
-```
-
-### Test Logistic Regression
-```bash
-# Start roscore
-roscore
-
-# Run logistic regression node
-rosrun aae4011_ai_uas logistic_regression_node.py
-
-# In another terminal, publish test data
-rostopic pub /input_features std_msgs/Float64MultiArray "data: [2.5]"
-```
+| Velodyne LiDAR | `/velodyne_points` |
+| Ouster LiDAR | `/ouster/points` |
+| Livox LiDAR | `/livox/lidar` |
+| Intel RealSense | `/camera/depth/points` |
+| Generic | `/points`, `/lidar/points` |
 
 ## Directory Structure
 
@@ -206,15 +189,11 @@ aae4011_ai_uas/
 ├── package.xml             # Package manifest
 ├── setup.py                # Python setup
 ├── README.md               # This file
-├── launch/                 # Launch files
-│   ├── demo.launch
-│   ├── object_detection.launch
-│   └── trajectory_visualizer.launch
-├── scripts/                # Python ROS nodes
-│   ├── logistic_regression_node.py
-│   ├── object_detection_node.py
-│   └── trajectory_visualizer.py
-├── src/                    # Python modules
+├── launch/
+│   └── pointcloud_analyzer.launch
+├── scripts/
+│   └── pointcloud_analyzer.py
+├── src/
 │   └── aae4011_ai_uas/
 │       ├── __init__.py
 │       └── utils.py
@@ -222,11 +201,21 @@ aae4011_ai_uas/
 └── config/                 # Configuration files
 ```
 
-## Related Resources
+## Troubleshooting
 
-- **Standalone Python Examples**: See `lecture_slide_code/` in the main repository
-- **Course Materials**: [AAE4011 GitHub Page](https://github.com/weisongwen/AAE4011-S22526)
-- **YOLOv5 Documentation**: [Ultralytics YOLOv5](https://github.com/ultralytics/yolov5)
+### No data received
+- Check if the point cloud topic exists: `rostopic list | grep points`
+- Verify topic name: `rostopic info /your_topic`
+- Check message type: Should be `sensor_msgs/PointCloud2`
+
+### Low frequency reported
+- Ensure the LiDAR is running at expected rate
+- Check for network delays if using remote sensors
+- Verify no other nodes are consuming too much bandwidth
+
+### Import errors
+- Ensure numpy is installed: `pip3 install numpy`
+- Source your workspace: `source ~/catkin_ws/devel/setup.bash`
 
 ## Course Information
 

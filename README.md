@@ -94,9 +94,11 @@ ros_package/
 ```
 
 **ROS Package Features:**
-- Object Detection Node (YOLOv5)
-- Trajectory Visualization Node
-- Logistic Regression Node
+- Point Cloud Analyzer Node: Analyzes 3D LiDAR point cloud data
+  - Number of points analysis
+  - Frequency calculation
+  - Spatial statistics (min, max, mean, std for X, Y, Z)
+  - Bounding box calculation
 
 **Installation:**
 ```bash
@@ -110,7 +112,7 @@ source devel/setup.bash
 
 **Usage:**
 ```bash
-roslaunch aae4011_ai_uas demo.launch
+roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/velodyne_points
 ```
 
 For detailed ROS package documentation, see [ros_package/aae4011_ai_uas/README.md](ros_package/aae4011_ai_uas/README.md).

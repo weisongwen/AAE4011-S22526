@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+AAE4011 - Artificial Intelligence for Unmanned Autonomous Systems
+Launch file for Point Cloud Analyzer node
+
+Usage:
+  roslaunch aae4011_ai_uas pointcloud_analyzer.launch
+  roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/velodyne_points
+  roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/lidar/points
+-->
+<launch>
+  <!-- Arguments -->
+  <arg name="pointcloud_topic" default="/velodyne_points" 
+       doc="Input point cloud topic (e.g., /velodyne_points, /lidar/points, /camera/depth/points)"/>
+  <arg name="window_size" default="10" 
+       doc="Number of messages for frequency calculation"/>
+  
+  <!-- Point Cloud Analyzer Node -->
+  <node name="pointcloud_analyzer" pkg="aae4011_ai_uas" type="pointcloud_analyzer.py" output="screen">
+    <param name="pointcloud_topic" value="$(arg pointcloud_topic)"/>
+    <param name="window_size" value="$(arg window_size)"/>
+  </node>
+</launch>

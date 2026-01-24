@@ -7,33 +7,10 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   sensor_msgs
   geometry_msgs
-  nav_msgs
-  visualization_msgs
-  message_generation
 )
 
 ## Python setup
 catkin_python_setup()
-
-## Generate messages
-# add_message_files(
-#   FILES
-#   DetectionResult.msg
-#   TrajectoryPoint.msg
-# )
-
-## Generate services
-# add_service_files(
-#   FILES
-#   DetectObjects.srv
-# )
-
-## Generate added messages and services
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-#   geometry_msgs
-# )
 
 ## Catkin package configuration
 catkin_package(
@@ -41,10 +18,7 @@ catkin_package(
     rospy 
     std_msgs 
     sensor_msgs 
-    geometry_msgs 
-    nav_msgs 
-    visualization_msgs
-    message_runtime
+    geometry_msgs
 )
 
 ## Include directories
@@ -54,9 +28,7 @@ include_directories(
 
 ## Install Python scripts
 catkin_install_python(PROGRAMS
-  scripts/trajectory_visualizer.py
-  scripts/object_detection_node.py
-  scripts/logistic_regression_node.py
+  scripts/pointcloud_analyzer.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
