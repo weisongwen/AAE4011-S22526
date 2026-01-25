@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Argument: Path to the rosbag file to play -->
+  <!-- No default - must be provided by user (will error if not specified) -->
+  <arg name="bag_file" />
+  <!-- Argument: Point cloud topic name -->
+  <!-- Default: /velodyne_points (common LiDAR topic name) -->
+  <arg name="topic" default="/points_raw" />
+  
+  <!-- Argument: Output directory for PCD files -->
+  <!-- Default: /tmp/pcd_output (temporary directory, safe for testing) -->
+  <arg name="output_dir" default="$(find aae4011_pcd_extractor)/pcd_output" />
+  
+  <!-- Argument: Playback rate for rosbag (1.0 = real-time) -->
+  <!-- Can slow down (0.5 = half speed) or speed up (2.0 = double speed) -->
+  <arg name="rate" default="1.0" />
+  
+  <node 
+    pkg="aae4011_pcd_extractor" 
+    type="pcd_extractor_node" 
+    name="pcd_extractor_node" 
+    output="screen"
+  >
+
+    <!-- Argument: Output directory for PCD files -->
+    <param name="output_directory" value="$(find aae4011_pcd_extractor)/pcd_output" />
+    <!-- Argument: Point cloud topic name -->
+    <param name="pointcloud_topic" value="$(arg topic)" />
+
+  </node>
+  <!-- Argument: Start paused? (true/false) -->
+  <!-- If true, bag starts paused and user must press space to play -->
+  <arg name="start_paused" default="false" />
+  
+  <arg name="info_header" value="
+  ========================================
+  PCD Extractor Launch File
+  ========================================" />
+  
+  <!-- Print header (trick: use arg with value to print) -->
+  <param name="info_header" value="$(arg info_header)" />
+
+</launch>

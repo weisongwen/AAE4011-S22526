@@ -1,0 +1,279 @@
+<?xml version="1.0"?>
+<!--
+  ============================================================================
+  PACKAGE.XML - ROS Package Manifest File
+  ============================================================================
+  
+  This file contains metadata about your ROS package. It tells the ROS 
+  ecosystem about your package's name, version, dependencies, and more.
+  
+  This is an XML file following the ROS package format specification.
+  Format: http://wiki.ros.org/catkin/package.xml
+  ============================================================================
+-->
+
+<package format="2">
+  <!-- 
+    =========================================================================
+    PACKAGE NAME
+    =========================================================================
+    The unique identifier for this package in the ROS ecosystem.
+    Must be lowercase, can contain letters, numbers, and underscores.
+    This is how you'll refer to the package in commands like:
+    - rosrun aae4011_pcd_extractor pcd_extractor_node
+    - roslaunch aae4011_pcd_extractor extract_pcd.launch
+  -->
+  <name>aae4011_pcd_extractor</name>
+  
+  <!-- 
+    =========================================================================
+    VERSION
+    =========================================================================
+    Semantic versioning: MAJOR.MINOR.PATCH
+    - MAJOR: Incompatible API changes
+    - MINOR: Add functionality (backwards-compatible)
+    - PATCH: Bug fixes (backwards-compatible)
+    
+    For educational packages, version 1.0.0 indicates a complete, working example.
+  -->
+  <version>1.0.0</version>
+  
+  <!-- 
+    =========================================================================
+    DESCRIPTION
+    =========================================================================
+    A brief description of what this package does.
+    Should be one or two sentences explaining the package's purpose.
+  -->
+  <description>
+    A ROS package for extracting point clouds from rosbag files and saving 
+    them as PCD files. This is an educational package demonstrating ROS 
+    package development for undergraduate students.
+  </description>
+
+  <!-- 
+    =========================================================================
+    MAINTAINER
+    =========================================================================
+    The person responsible for maintaining this package.
+    Email is required for contact purposes.
+    Multiple maintainers can be specified with multiple tags.
+  -->
+  <maintainer email="wenwsrobo@gmail.com">AAE4011 Teaching Team</maintainer>
+
+  <!-- 
+    =========================================================================
+    LICENSE
+    =========================================================================
+    The license under which this package is released.
+    Common licenses: BSD, MIT, Apache-2.0, GPL, LGPL
+    
+    For educational packages, BSD is a permissive, student-friendly license.
+    It allows students to use and modify the code freely.
+  -->
+  <license>BSD</license>
+
+  <!-- 
+    =========================================================================
+    AUTHOR (Optional)
+    =========================================================================
+    Original author(s) of the package.
+    Can have multiple author tags for multiple contributors.
+  -->
+  <author email="student@university.edu">AAE4011 Teaching Team</author>
+
+  <!-- 
+    =========================================================================
+    URL (Optional)
+    =========================================================================
+    URLs for more information about the package.
+    Types: website, repository, bugtracker
+  -->
+  <!-- <url type="website">http://wiki.ros.org/aae4011_pcd_extractor</url> -->
+
+  <!-- 
+    =========================================================================
+    BUILDTOOL DEPENDENCY
+    =========================================================================
+    The build system tool required to build this package.
+    
+    For ROS 1 packages, this is ALWAYS "catkin".
+    Catkin is the official build system for ROS.
+    
+    This tells the build system (catkin_make or catkin build) that this 
+    package uses the catkin build system.
+  -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- 
+    =========================================================================
+    BUILD DEPENDENCIES
+    =========================================================================
+    Packages required at COMPILE TIME (when building the package).
+    
+    These dependencies are needed because:
+    - Our C++ code includes their header files
+    - We link against their libraries
+    - CMakeLists.txt calls find_package() for them
+    
+    Think of these as the #include statements in C++ - we need them to compile.
+  -->
+  
+  <!-- 
+    roscpp: The C++ client library for ROS
+    - Provides core ROS functionality in C++ (nodes, topics, services, etc.)
+    - Required for ANY C++ ROS node
+    - Includes: ros::init(), ros::NodeHandle, ros::Subscriber, etc.
+  -->
+  <build_depend>roscpp</build_depend>
+
+  <!-- 
+    sensor_msgs: Common sensor message definitions
+    - Provides standard message types for sensor data
+    - We use: sensor_msgs::PointCloud2 (3D point cloud message format)
+    - Also includes: Image, Imu, LaserScan, CameraInfo, etc.
+  -->
+  <build_depend>sensor_msgs</build_depend>
+
+  <!-- 
+    pcl_ros: Point Cloud Library (PCL) integration with ROS
+    - Bridges between ROS messages and PCL data structures
+    - Provides conversion functions: fromROSMsg(), toROSMsg()
+    - Essential for working with point clouds in ROS
+  -->
+  <build_depend>pcl_ros</build_depend>
+
+  <!-- 
+    pcl_conversions: Low-level conversion utilities
+    - Converts between ROS and PCL data types
+    - Handles message format conversions
+    - Timestamp conversions between ROS time and PCL time
+  -->
+  <build_depend>pcl_conversions</build_depend>
+
+  <!-- 
+    =========================================================================
+    EXECUTION DEPENDENCIES
+    =========================================================================
+    Packages required at RUNTIME (when running the compiled executable).
+    
+    These dependencies are needed because:
+    - The executable needs their shared libraries (.so files)
+    - Runtime environment needs their functionality
+    - ROS needs to find these packages when launching nodes
+    
+    Usually, if something is a build dependency, it's also an exec dependency.
+  -->
+  
+  <!-- Same packages needed at runtime as at build time -->
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>pcl_ros</exec_depend>
+  <exec_depend>pcl_conversions</exec_depend>
+
+  <!-- 
+    rosbag: Tools for recording and playing back ROS messages
+    - Only needed at runtime (not for compilation)
+    - Used to play back bag files
+    - Provides rosbag command-line tool
+    
+    Note: We don't directly use rosbag in our code, but users need it
+    to play bag files that our node processes.
+  -->
+  <exec_depend>rosbag</exec_depend>
+
+  <!-- 
+    =========================================================================
+    ALTERNATIVE: USING <depend> TAG
+    =========================================================================
+    
+    Instead of separate <build_depend> and <exec_depend>, you can use <depend>
+    which means the package is needed at BOTH build and runtime:
+    
+    <depend>roscpp</depend>
+    <depend>sensor_msgs</depend>
+    <depend>pcl_ros</depend>
+    <depend>pcl_conversions</depend>
+    <exec_depend>rosbag</exec_depend>
+    
+    This is shorter but less explicit about when dependencies are needed.
+  -->
+
+  <!-- 
+    =========================================================================
+    BUILD EXPORT DEPENDENCIES (Not used in this simple package)
+    =========================================================================
+    
+    <build_export_depend>: Packages required by packages that depend on this one
+    
+    Example: If you write a library that other packages will link against,
+    and your library's header files include headers from another package,
+    that other package is a build_export_depend.
+    
+    For simple executable nodes (like ours), this is not needed.
+  -->
+
+  <!-- 
+    =========================================================================
+    ADDITIONAL METADATA (Optional)
+    =========================================================================
+    
+    Other optional tags you might see:
+    
+    <doc_depend>: Documentation generation dependencies (e.g., doxygen, sphinx)
+    <test_depend>: Testing dependencies (e.g., rostest, gtest)
+    
+    Example:
+    <test_depend>rostest</test_depend>
+    <test_depend>gtest</test_depend>
+  -->
+
+  <!-- 
+    =========================================================================
+    EXPORT SECTION (Advanced)
+    =========================================================================
+    
+    The export section is used for special package-specific settings.
+    Not needed for simple executable packages.
+    
+    Examples of what can go here:
+    - Metapackages declarations
+    - Plugin descriptions
+    - Message generator dependencies
+    - Architecture-specific flags
+    
+    For our simple node, we don't need any exports.
+  -->
+  <export>
+    <!-- Nothing to export for this simple package -->
+  </export>
+
+  <!-- 
+    =========================================================================
+    SUMMARY FOR STUDENTS
+    =========================================================================
+    
+    Key Points to Remember:
+    
+    1. Package name must match the folder name
+    2. buildtool_depend is ALWAYS catkin for ROS 1 packages
+    3. If you #include a header, add it as build_depend
+    4. If you run code that uses a package, add it as exec_depend
+    5. When in doubt, use <depend> for both build and exec
+    6. Update dependencies whenever you add new #include statements
+    7. After modifying package.xml, run catkin_make again
+    
+    Common Mistakes:
+    ✗ Forgetting to add a dependency when using a new library
+    ✗ Package name doesn't match folder name
+    ✗ Missing buildtool_depend
+    ✗ Typos in package names (case-sensitive!)
+    
+    Testing Dependencies:
+    Run this command to check if all dependencies are installed:
+    $ rosdep install -from-paths . -ignore-src -r -y
+    
+    =========================================================================
+  -->
+
+</package>
