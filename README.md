@@ -11,7 +11,7 @@ This is the Github page for lecture AAE4011, Artificial Intelligence for Unmanne
 </p>
 
 - **Lecturer**: [Dr. Weisong Wen](https://www.polyu.edu.hk/aae/people/academic-staff/dr-wen-weisong/), [Department of Aeronautical and Aviation Engineering](https://www.polyu.edu.hk/aae/) (AAE)
-- **Address**: R820, PolyU
+- **Address**: Room R820, PolyU
 - **Email**: welson.wen@polyu.edu.hk
 - **Teaching Assistants**: Naigui Xiao, Xiangru Wang, Qi Zhang, Junzhe Wang
 - **Lecture Venue and Time**: BC302, Tue 12:30-15:20PM
