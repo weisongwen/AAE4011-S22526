@@ -4,7 +4,7 @@ Lecture page for AAE4011, Semester 2, 2025-2026
 
 ## AAE4011, [Artificial Intelligence for Unmanned Autonomous Systems](https://github.com/weisongwen/AAE4011-S22526)
 
-This is the Github page for lecture AAE4011, Artificial Intelligence for Unmanned Autonomous Systems. This page will include example code and learning materials. Students can raise issues from this Github repository through [Issue](https://github.com/weisongwen/AAE4011-S22526/issues).
+This is the GitHub page for lecture AAE4011, Artificial Intelligence for Unmanned Autonomous Systems. This page will include example code and learning materials. Students can raise issues from this Github repository through [Issue](https://github.com/weisongwen/AAE4011-S22526/issues).
 
 <p align="center">
   <img width="720pix" src="img/overview.png">
