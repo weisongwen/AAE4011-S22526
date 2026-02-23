@@ -117,6 +117,10 @@ roslaunch aae4011_ai_uas pointcloud_analyzer.launch pointcloud_topic:=/velodyne_
 
 For detailed ROS package documentation, see [ros_package/aae4011_ai_uas/README.md](ros_package/aae4011_ai_uas/README.md).
 
+## Assignment Resources
+
+- **Assignment 1 — Q3 Example README:** [Example README for ROS-Based Vehicle Detection](assignment_1/example_readme_Q3.md) — A template showing the expected structure and content for the Question 3 GitHub repository README.
+
 ## Questions
 
 Students can raise issues from this Github repository through the [Issue](https://github.com/weisongwen/AAE4011-S22526/issues) section.
