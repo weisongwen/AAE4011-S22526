@@ -1,5 +1,6 @@
 # Exclude LaTeX source files from student access
 lecture_slide_code/week_7/latex_tutorial/
+lecture_slide_code/week_8/latex/
 
 # Python cache
 __pycache__/
